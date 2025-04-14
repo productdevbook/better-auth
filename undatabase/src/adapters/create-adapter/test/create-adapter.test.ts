@@ -315,12 +315,10 @@ describe('create Adapter Helper', async () => {
 					      data: { emailVerified: true },
 					    })
 					    expect(res).toHaveProperty('emailVerified')
-					    // @ts-ignore
 					    expect(res.emailVerified).toBe(true)
 					  })()
 					})
         expect(createTRUEParameters.data).toHaveProperty('emailVerified')
-        // @ts-ignore
         expect(createTRUEParameters.data.emailVerified).toBe(1)
 
         // Testing false
@@ -345,12 +343,10 @@ describe('create Adapter Helper', async () => {
 					      data: { emailVerified: false },
 					    })
 					    expect(res).toHaveProperty('emailVerified')
-					    // @ts-ignore
 					    expect(res.emailVerified).toBe(false)
 					  })()
 					})
         expect(createFALSEParameters.data).toHaveProperty('emailVerified')
-        // @ts-ignore
         expect(createFALSEParameters.data.emailVerified).toBe(0)
       })
 
