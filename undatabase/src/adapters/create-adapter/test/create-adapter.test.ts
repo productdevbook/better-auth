@@ -1,6 +1,8 @@
+/* eslint-disable style/no-mixed-spaces-and-tabs */
+/* eslint-disable style/no-tabs */
 import type { User, Where } from '../../../types/index.ts'
 import type { AdapterConfig, CreateCustomAdapter } from '../types.ts'
-import { describe, expect } from 'vitest'
+import { describe, expect, it } from 'vitest'
 import { createAdapter } from '../index.ts'
 
 /*
