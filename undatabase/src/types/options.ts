@@ -1,4 +1,3 @@
-import type { CookieOptions } from 'better-call'
 import type { Database } from 'better-sqlite3'
 import type { Dialect, Kysely, MysqlPool, PostgresPool } from 'kysely'
 // import type { KyselyDatabaseType } from '../adapters/kysely-adapter/types'
@@ -26,7 +25,7 @@ export interface BetterAuthOptions {
   appName?: string
 
   plugins?: {
-    schema?: AuthPluginSchema;
+    schema?: AuthPluginSchema
   }[]
   /**
    * Base URL for the Better Auth. This is typically the
@@ -503,33 +502,6 @@ export interface BetterAuthOptions {
        */
       domain?: string
     }
-    /*
-		 * Allows you to change default cookie names and attributes
-		 *
-		 * default cookie names:
-		 * - "session_token"
-		 * - "session_data"
-		 * - "dont_remember"
-		 *
-		 * plugins can also add additional cookies
-		 */
-    cookies?: {
-      [key: string]: {
-        name?: string
-        attributes?: CookieOptions
-      }
-    }
-    defaultCookieAttributes?: CookieOptions
-    /**
-     * Prefix for cookies. If a cookie name is provided
-     * in cookies config, this will be overridden.
-     *
-     * @default
-     * ```txt
-     * "appName" -> which defaults to "better-auth"
-     * ```
-     */
-    cookiePrefix?: string
     /**
      * Database configuration.
      */
@@ -555,12 +527,11 @@ export interface BetterAuthOptions {
        * If not provided, random ids will be generated.
        * If set to false, the database's auto generated id will be used.
        */
-      generateId?:
-				| ((options: {
-				  model: LiteralUnion<Models, string>
-				  size?: number
-				}) => string)
-				| false
+      generateId?: | ((options: {
+        model: LiteralUnion<Models, string>
+        size?: number
+      }) => string)
+      | false
     }
     /**
      * Custom generateId function.
@@ -570,13 +541,11 @@ export interface BetterAuthOptions {
      *
      * @deprecated Please use `database.generateId` instead. This will be potentially removed in future releases.
      */
-    generateId?:
-			| ((options: {
-			  model: LiteralUnion<Models, string>
-			  size?: number
-			}) => string)
-			| false
+    generateId?: | ((options: {
+      model: LiteralUnion<Models, string>
+      size?: number
+    }) => string)
+    | false
   }
   logger?: Logger
-
 }
