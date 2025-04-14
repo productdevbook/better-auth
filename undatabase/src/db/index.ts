@@ -1,5 +1,6 @@
 /**
- * Basic database field attribute definition
+ * Database-related types and functions
+ * Exports field attributes and table schema functionality
  */
 export interface FieldAttribute {
   type: string
@@ -8,7 +9,8 @@ export interface FieldAttribute {
   fieldName?: string
   defaultValue?: () => any
   references?: {
-    model: string
+    table?: string
+    model?: string
     field: string
   }
   transform?: {
@@ -17,3 +19,5 @@ export interface FieldAttribute {
   }
   bigint?: boolean
 }
+
+export * from "./get-tables.ts";

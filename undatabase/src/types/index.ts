@@ -9,6 +9,19 @@ export interface Where {
   connector?: 'AND' | 'OR'
 }
 
+/**
+ * User model interface
+ */
+export interface User {
+  id: string
+  name?: string
+  email?: string
+  emailVerified?: boolean
+  image?: string
+  createdAt: Date
+  updatedAt: Date
+}
+
 export interface BetterAuthOptions {
   advanced?: {
     database?: {
