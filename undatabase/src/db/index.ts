@@ -20,4 +20,4 @@ export interface FieldAttribute {
   bigint?: boolean
 }
 
-export * from "./get-tables.ts";
+export * from './get-tables.ts'

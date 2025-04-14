@@ -2,7 +2,7 @@
  * Core database schema definition types and functions
  */
 
-import type { BetterAuthOptions } from "../types/index.ts";
+import type { BetterAuthOptions } from '../types/index.ts'
 
 export interface TableSchema {
   modelName: string
@@ -18,63 +18,63 @@ export function getAuthTables(options: BetterAuthOptions = {}): BetterAuthDbSche
   // Default user schema
   const tables: BetterAuthDbSchema = {
     user: {
-      modelName: options.user?.modelName || "user",
+      modelName: options.user?.modelName || 'user',
       fields: {
         name: {
-          type: "string",
-          fieldName: options.user?.fields?.name || "name",
+          type: 'string',
+          fieldName: options.user?.fields?.name || 'name',
         },
         email: {
-          type: "string",
+          type: 'string',
           unique: true,
-          fieldName: options.user?.fields?.email || "email",
+          fieldName: options.user?.fields?.email || 'email',
         },
         emailVerified: {
-          type: "boolean",
+          type: 'boolean',
           defaultValue: () => false,
-          fieldName: options.user?.fields?.emailVerified || "emailVerified",
+          fieldName: options.user?.fields?.emailVerified || 'emailVerified',
         },
         image: {
-          type: "string",
-          fieldName: options.user?.fields?.image || "image",
+          type: 'string',
+          fieldName: options.user?.fields?.image || 'image',
         },
         createdAt: {
-          type: "date",
+          type: 'date',
           defaultValue: () => new Date(),
-          fieldName: options.user?.fields?.createdAt || "createdAt",
+          fieldName: options.user?.fields?.createdAt || 'createdAt',
         },
         updatedAt: {
-          type: "date",
+          type: 'date',
           defaultValue: () => new Date(),
-          fieldName: options.user?.fields?.updatedAt || "updatedAt",
+          fieldName: options.user?.fields?.updatedAt || 'updatedAt',
         },
         ...options.user?.additionalFields,
       },
     },
     session: {
-      modelName: options.session?.modelName || "session",
+      modelName: options.session?.modelName || 'session',
       fields: {
         userId: {
-          type: "string",
+          type: 'string',
           references: {
-            table: "user",
-            field: "id",
+            table: 'user',
+            field: 'id',
           },
-          fieldName: options.session?.fields?.userId || "userId",
+          fieldName: options.session?.fields?.userId || 'userId',
         },
         expires: {
-          type: "date",
-          fieldName: options.session?.fields?.expires || "expires",
+          type: 'date',
+          fieldName: options.session?.fields?.expires || 'expires',
         },
         sessionToken: {
-          type: "string",
+          type: 'string',
           unique: true,
-          fieldName: options.session?.fields?.sessionToken || "sessionToken",
+          fieldName: options.session?.fields?.sessionToken || 'sessionToken',
         },
         ...options.session?.additionalFields,
       },
     },
-  };
-  
-  return tables;
+  }
+
+  return tables
 }

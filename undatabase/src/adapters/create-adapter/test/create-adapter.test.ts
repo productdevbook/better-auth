@@ -1,7 +1,7 @@
-import type { User, Where } from '../../../types/index.ts';
-import type { AdapterConfig, CreateCustomAdapter } from '../types.ts';
-import { describe, expect } from 'vitest';
-import { createAdapter } from '../index.ts';
+import type { User, Where } from '../../../types/index.ts'
+import type { AdapterConfig, CreateCustomAdapter } from '../types.ts'
+import { describe, expect } from 'vitest'
+import { createAdapter } from '../index.ts'
 
 /*
 
@@ -61,7 +61,7 @@ async function createTestAdapter(
       supportsBooleans: true,
     },
     config,
-  );
+  )
 
   const testAdapter = createAdapter({
     config: adapterConfig,
@@ -95,8 +95,7 @@ async function createTestAdapter(
         async delete(data) {
           if (x.delete) {
             return await x.delete(data)
-					}
-
+          }
         },
         async deleteMany(data) {
           if (x.deleteMany) {
@@ -139,11 +138,11 @@ describe('create Adapter Helper', async () => {
     },
   })
 
-  test('should have the correct adapter id', () => {
+  it('should have the correct adapter id', () => {
     expect(adapter.id).toBe(adapterId)
   })
 
-  test('should use the id generator if passed into the betterAuth config', async () => {
+  it('should use the id generator if passed into the betterAuth config', async () => {
     const adapter = await createTestAdapter({
       config: {
         debugLogs: {},
@@ -167,7 +166,7 @@ describe('create Adapter Helper', async () => {
     expect(res.id).toBe('HARD-CODED-ID')
   })
 
-  test('should throw an error if the database doesn't support numeric ids and the user has enabled `useNumberId`', async () => {
+  it('should throw an error if the database does not support numeric ids and the user has enabled `useNumberId`', async () => {
     let error: any | null = null
     try {
       await createTestAdapter({
@@ -183,7 +182,7 @@ describe('create Adapter Helper', async () => {
         },
       })
     }
- catch (err) {
+    catch (err) {
       error = err
     }
     expect(error).not.toBeNull()
@@ -217,7 +216,7 @@ describe('create Adapter Helper', async () => {
         expect(res?.updatedAt).toBeInstanceOf(Date)
       })
 
-      test('should include an "id" in the result in all cases, unless "select" is used to exclude it', async () => {
+      it('should include an "id" in the result in all cases, unless "select" is used to exclude it', async () => {
         const res = await adapter.create({
           model: 'user',
           data: { name: 'test-name' },
@@ -250,7 +249,7 @@ describe('create Adapter Helper', async () => {
         expect(res3).not.toHaveProperty('id')
       })
 
-      test('should recieve a generated id during the call, unless "disableIdGeneration" is set to true', async () => {
+      it('should recieve a generated id during the call, unless "disableIdGeneration" is set to true', async () => {
         const createWithId: { id: unknown } = await new Promise(async (r) => {
           const adapter = await createTestAdapter({
             adapter(args_0) {
@@ -299,7 +298,7 @@ describe('create Adapter Helper', async () => {
         expect(createWithoutId.id).toBeUndefined()
       })
 
-      test('should modify boolean type to 1 or 0 if the DB doesn't support it. And expect the result to be transformed back to boolean', async () => {
+      it('should modify boolean type to 1 or 0 if the DB does not support it. And expect the result to be transformed back to boolean', async () => {
         // Testing true
         const createTRUEParameters: { data: { emailVerified: number } }
 					= await new Promise(async (r) => {
@@ -357,7 +356,7 @@ describe('create Adapter Helper', async () => {
         expect(createFALSEParameters.data.emailVerified).toBe(0)
       })
 
-      test('should modify JSON type to TEXT if the DB doesn't support it. And expect the result to be transformed back to JSON', async () => {
+      it('should modify JSON type to TEXT if the DB does not support it. And expect the result to be transformed back to JSON', async () => {
         const createJSONParameters: { data: { preferences: string } }
 					= await new Promise(async (r) => {
 					  const adapter = await createTestAdapter({
@@ -397,7 +396,7 @@ describe('create Adapter Helper', async () => {
         )
       })
 
-      test('should modify date type to TEXT if the DB doesn't support it. And expect the result to be transformed back to date', async () => {
+      it('should modify date type to TEXT if the DB does not support it. And expect the result to be transformed back to date', async () => {
         const testDate = new Date()
         const createDateParameters: { data: { createdAt: string } }
 					= await new Promise(async (r) => {
@@ -427,7 +426,7 @@ describe('create Adapter Helper', async () => {
         )
       })
 
-      test('should allow custom transform input', async () => {
+      it('should allow custom transform input', async () => {
         const createCustomTransformInputParameters: { data: { name: string } }
 					= await new Promise(async (r) => {
 					  const adapter = await createTestAdapter({
@@ -464,7 +463,7 @@ describe('create Adapter Helper', async () => {
         )
       })
 
-      test('should allow custom transform output', async () => {
+      it('should allow custom transform output', async () => {
         const createCustomTransformOutputParameters: {
           data: { name: string }
         } = await new Promise(async (r) => {
@@ -498,11 +497,11 @@ describe('create Adapter Helper', async () => {
           'name',
         )
         expect(createCustomTransformOutputParameters.data.name).toEqual(
-          'TEST-NAME', // Remains the same as the input because we're only transforming the output
+          'TEST-NAME',
         )
       })
 
-      test('should allow custom transform input and output', async () => {
+      it('should allow custom transform input and output', async () => {
         const createCustomTransformInputAndOutputParameters: {
           data: { name: string }
         } = await new Promise(async (r) => {
@@ -546,7 +545,7 @@ describe('create Adapter Helper', async () => {
         )
       })
 
-      test('should allow custom map input key transformation', async () => {
+      it('should allow custom map input key transformation', async () => {
         const parameters: {
           data: { email_address: string }
         } = await new Promise(async (r) => {
@@ -579,7 +578,7 @@ describe('create Adapter Helper', async () => {
         expect(parameters.data.email_address).toEqual('test@test.com')
       })
 
-      test('should allow custom map output key transformation', async () => {
+      it('should allow custom map output key transformation', async () => {
         const parameters: {
           data: { email: string }
         } = await new Promise(async (r) => {
@@ -615,7 +614,7 @@ describe('create Adapter Helper', async () => {
         expect(parameters.data.email).toEqual('test@test.com')
       })
 
-      test('should allow custom map input and output key transformation', async () => {
+      it('should allow custom map input and output key transformation', async () => {
         const parameters: {
           data: { email_address: string }
         } = await new Promise(async (r) => {
@@ -651,7 +650,7 @@ describe('create Adapter Helper', async () => {
         expect(parameters.data.email_address).toEqual('test@test.com')
       })
 
-      test('should expect the fields to be transformed into the correct field names if customized', async () => {
+      it('should expect the fields to be transformed into the correct field names if customized', async () => {
         const parameters: { data: any, select?: string[], model: string }
 					= await new Promise(async (r) => {
 					  const adapter = await createTestAdapter({
@@ -688,7 +687,7 @@ describe('create Adapter Helper', async () => {
         expect(parameters.data.email_address).toEqual('test@test.com')
       })
 
-      test('should expect the model to be transformed into the correct model name if customized', async () => {
+      it('should expect the model to be transformed into the correct model name if customized', async () => {
         const parameters: { data: any, select?: string[], model: string }
 					= await new Promise(async (r) => {
 					  const adapter = await createTestAdapter({
@@ -720,7 +719,7 @@ describe('create Adapter Helper', async () => {
         expect(parameters.model).toEqual('user_table')
       })
 
-      test('should expect the result to follow the schema', async () => {
+      it('should expect the result to follow the schema', async () => {
         const parameters: { data: any, select?: string[], model: string }
 					= await new Promise(async (r) => {
 					  const adapter = await createTestAdapter({
@@ -762,7 +761,7 @@ describe('create Adapter Helper', async () => {
         expect(parameters.data.email_address).toEqual('test@test.com')
       })
 
-      test('should expect the result to respect the select fields', async () => {
+      it('should expect the result to respect the select fields', async () => {
         const adapter = await createTestAdapter({
           config: {
             debugLogs: {},
@@ -813,7 +812,7 @@ describe('create Adapter Helper', async () => {
         expect(res).toHaveProperty('updatedAt')
       })
 
-      test(`should include an "id" in the result in all cases`, async () => {
+      it('should include an "id" in the result in all cases', async () => {
         const user: { id: string, name: string } = await adapter.create({
           model: 'user',
           data: { name: 'test-name' },
@@ -826,7 +825,7 @@ describe('create Adapter Helper', async () => {
         expect(res).toHaveProperty('id')
       })
 
-      test('should modify boolean type to 1 or 0 if the DB doesn't support it. And expect the result to be transformed back to boolean', async () => {
+      it('should modify boolean type to 1 or 0 if the DB does not support it. And expect the result to be transformed back to boolean', async () => {
         // Testing true
         const updateTRUEParameters: { update: { emailVerified: number } }
 					= await new Promise(async (r) => {
@@ -896,7 +895,7 @@ describe('create Adapter Helper', async () => {
         expect(createFALSEParameters.update.emailVerified).toBe(0)
       })
 
-      test('should modify JSON type to TEXT if the DB doesn't support it. And expect the result to be transformed back to JSON', async () => {
+      it('should modify JSON type to TEXT if the DB does not support it. And expect the result to be transformed back to JSON', async () => {
         const createJSONParameters: { update: { preferences: string } }
 					= await new Promise(async (r) => {
 					  const adapter = await createTestAdapter({
@@ -941,7 +940,7 @@ describe('create Adapter Helper', async () => {
         )
       })
 
-      test('should modify date type to TEXT if the DB doesn't support it. And expect the result to be transformed back to date', async () => {
+      it('should modify date type to TEXT if the DB does not support it. And expect the result to be transformed back to date', async () => {
         const testDate = new Date()
         const createDateParameters: { update: { createdAt: string } }
 					= await new Promise(async (r) => {
@@ -976,7 +975,7 @@ describe('create Adapter Helper', async () => {
         )
       })
 
-      test('should allow custom transform input', async () => {
+      it('should allow custom transform input', async () => {
         const createCustomTransformInputParameters: {
           update: { name: string }
         } = await new Promise(async (r) => {
@@ -1018,7 +1017,7 @@ describe('create Adapter Helper', async () => {
         )
       })
 
-      test('should allow custom transform output', async () => {
+      it('should allow custom transform output', async () => {
         const createCustomTransformOutputParameters: {
           update: { name: string }
         } = await new Promise(async (r) => {
@@ -1060,7 +1059,7 @@ describe('create Adapter Helper', async () => {
         )
       })
 
-      test('should allow custom transform input and output', async () => {
+      it('should allow custom transform input and output', async () => {
         const createCustomTransformInputAndOutputParameters: {
           update: { name: string }
         } = await new Promise(async (r) => {
@@ -1108,7 +1107,7 @@ describe('create Adapter Helper', async () => {
         ).toEqual('test-name-2'.toUpperCase())
       })
 
-      test('should allow custom map input key transformation', async () => {
+      it('should allow custom map input key transformation', async () => {
         const parameters: {
           update: { email_address: string }
         } = await new Promise(async (r) => {
@@ -1147,7 +1146,7 @@ describe('create Adapter Helper', async () => {
         expect(parameters.update.email_address).toEqual('test2@test.com')
       })
 
-      test('should allow custom map output key transformation', async () => {
+      it('should allow custom map output key transformation', async () => {
         const parameters: {
           update: { email: string }
         } = await new Promise(async (r) => {
@@ -1187,7 +1186,7 @@ describe('create Adapter Helper', async () => {
         expect(parameters.update.email).toEqual('test2@test.com')
       })
 
-      test('should allow custom map input and output key transformation', async () => {
+      it('should allow custom map input and output key transformation', async () => {
         const parameters: {
           update: { email_address: string }
         } = await new Promise(async (r) => {
@@ -1230,7 +1229,7 @@ describe('create Adapter Helper', async () => {
         expect(parameters.update.email_address).toEqual('test2@test.com')
       })
 
-      test('should expect the fields to be transformed into the correct field names if customized', async () => {
+      it('should expect the fields to be transformed into the correct field names if customized', async () => {
         const parameters: {
           update: { email_address: string }
         } = await new Promise(async (r) => {
@@ -1272,7 +1271,7 @@ describe('create Adapter Helper', async () => {
         expect(parameters.update.email_address).toEqual('test2@test.com')
       })
 
-      test('should expect not to receive an id even if disableIdGeneration is false in an update call', async () => {
+      it('should expect not to receive an id even if disableIdGeneration is false in an update call', async () => {
         const parameters: {
           update: { id: string }
         } = await new Promise(async (r) => {
@@ -1344,7 +1343,7 @@ describe('create Adapter Helper', async () => {
 					})
         expect(parameters.where[0].field).toEqual('email_address')
       })
-      test('findMany: Should transform the where clause according to the schema', async () => {
+      it('findMany: Should transform the where clause according to the schema', async () => {
         const parameters: { where: Where[] | undefined, model: string }
 					= await new Promise(async (r) => {
 					  const adapter = await createTestAdapter({
@@ -1387,7 +1386,7 @@ describe('create Adapter Helper', async () => {
         expect(parameters.where?.[0].field).toEqual('email_address')
       })
 
-      test('findOne: Should recieve an integer id in where clause if the user has enabled `useNumberId`', async () => {
+      it('findOne: Should recieve an integer id in where clause if the user has enabled `useNumberId`', async () => {
         const parameters: { where: Where[], model: string, select?: string[] }
 					= await new Promise(async (r) => {
 					  const adapter = await createTestAdapter({
@@ -1427,7 +1426,7 @@ describe('create Adapter Helper', async () => {
         // The where clause should conver the string id value of `"1"` to an int since `useNumberId` is true
         expect(parameters.where[0].value).toEqual(1)
       })
-      test('findMany: Should recieve an integer id in where clause if the user has enabled `useNumberId`', async () => {
+      it('findMany: Should recieve an integer id in where clause if the user has enabled `useNumberId`', async () => {
         const parameters: { where: Where[] | undefined, model: string }
 					= await new Promise(async (r) => {
 					  const adapter = await createTestAdapter({
