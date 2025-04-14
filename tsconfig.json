@@ -15,5 +15,10 @@
 		"noImplicitOverride": true,
 		"noFallthroughCasesInSwitch": true
 	},
-	"exclude": ["**/dist/**", "**/node_modules/**", "**/examples/**", "undatabase"]
+	"exclude": ["**/dist/**", "**/node_modules/**", "**/examples/**", "undatabase"],
+	"references": [
+		{
+			"path": "./packages/undatabase"
+		},
+	]
 }
