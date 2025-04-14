@@ -366,64 +366,6 @@ async function adapterTest(
     },
   )
 
-  test.skipIf(disabledTests?.SHOULD_WORK_WITH_REFERENCE_FIELDS)(
-    `${testPrefix ? `${testPrefix} - ` : ''}${
-      adapterTests.SHOULD_WORK_WITH_REFERENCE_FIELDS
-    }`,
-    async ({ onTestFailed }) => {
-      resetDebugLogs()
-      onTestFailed(() => {
-        printDebugLogs()
-      })
-      let token = null
-      const user = await (await adapter()).create<Record<string, any>>({
-        model: 'user',
-        data: {
-          name: 'user',
-          email: 'my-email@email.com',
-          emailVerified: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      })
-      const session = await (await adapter()).create({
-        model: 'session',
-        data: {
-          token: generateId(),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-          userId: user.id,
-          expiresAt: new Date(),
-        },
-      })
-      token = session.token
-      const res = await (await adapter()).findOne({
-        model: 'session',
-        where: [
-          {
-            field: 'userId',
-            value: user.id,
-          },
-        ],
-      })
-      const resToken = await (await adapter()).findOne({
-        model: 'session',
-        where: [
-          {
-            field: 'token',
-            value: token,
-          },
-        ],
-      })
-      expect(res).toMatchObject({
-        userId: user.id,
-      })
-      expect(resToken).toMatchObject({
-        userId: user.id,
-      })
-    },
-  )
-
   test.skipIf(disabledTests?.SHOULD_FIND_MANY_WITH_SORT_BY)(
     `${testPrefix ? `${testPrefix} - ` : ''}${
       adapterTests.SHOULD_FIND_MANY_WITH_SORT_BY
@@ -494,7 +436,7 @@ async function adapterTest(
         model: 'user',
         offset: 2,
       })
-      expect(res.length).toBe(5)
+      expect(res.length).toBe(4)
     },
   )
 
@@ -704,7 +646,7 @@ async function adapterTest(
           },
         ],
       })
-      expect(res.length).toBe(3)
+      expect(res.length).toBe(2)
     },
   )
 

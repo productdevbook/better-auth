@@ -224,8 +224,9 @@ export function createAdapter({
      * then we should return the model name ending with an `s`.
      */
     const getModelName = (model: string) => {
-      return schema[model].modelName !== model
-        ? schema[model].modelName
+      console.log('model', model, schema)
+      return schema[model]?.modelName !== model
+        ? schema[model]?.modelName
         : config.usePlural
           ? `${model}s`
           : model
@@ -317,7 +318,7 @@ export function createAdapter({
       action: 'create' | 'update',
     ) => {
       const transformedData: Record<string, any> = {}
-      const fields = schema[unsafe_model].fields
+      const fields = schema[unsafe_model]?.fields
       const newMappedKeys = config.mapKeysTransformInput ?? {}
       if (
         !config.disableIdGeneration
