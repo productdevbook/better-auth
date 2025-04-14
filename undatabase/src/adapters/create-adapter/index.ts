@@ -141,43 +141,6 @@ export function createAdapter({
     const schema = getAuthTables(options)
 
     /**
-     * This function helps us get the default field name from the schema defined by devs.
-     * Often times, the user will be using the `fieldName` which could had been customized by the users.
-     * This function helps us get the actual field name useful to match against the schema. (eg: schema[model].fields[field])
-     *
-     * If it's still unclear what this does:
-     *
-     * 1. User can define a custom fieldName.
-     * 2. When using a custom fieldName, doing something like `schema[model].fields[field]` will not work.
-     */
-    const getDefaultFieldName = ({
-      field,
-      model: unsafe_model,
-    }: { model: string, field: string }) => {
-      // Plugin `schema`s can't define their own `id`. Better-auth auto provides `id` to every schema model.
-      // Given this, we can't just check if the `field` (that being `id`) is within the schema's fields, since it is never defined.
-      // So we check if the `field` is `id` and if so, we return `id` itself. Otherwise, we return the `field` from the schema.
-      if (field === 'id') {
-        return field
-      }
-      const model = getDefaultModelName(unsafe_model) // Just to make sure the model name is correct.
-
-      let f = schema[model]?.fields[field]
-      if (!f) {
-        // @ts-expect-error
-        f = Object.values(schema[model]?.fields).find(
-          f => f.fieldName === field,
-        )
-      }
-      if (!f) {
-        debugLog(`Field ${field} not found in model ${model}`)
-        debugLog(`Schema:`, schema)
-        throw new Error(`Field ${field} not found in model ${model}`)
-      }
-      return field
-    }
-
-    /**
      * This function helps us get the default model name from the schema defined by devs.
      * Often times, the user will be using the `modelName` which could had been customized by the users.
      * This function helps us get the actual model name useful to match against the schema. (eg: schema[model])
@@ -216,6 +179,43 @@ export function createAdapter({
         throw new Error(`Model "${model}" not found in schema`)
       }
       return m
+    }
+
+    /**
+     * This function helps us get the default field name from the schema defined by devs.
+     * Often times, the user will be using the `fieldName` which could had been customized by the users.
+     * This function helps us get the actual field name useful to match against the schema. (eg: schema[model].fields[field])
+     *
+     * If it's still unclear what this does:
+     *
+     * 1. User can define a custom fieldName.
+     * 2. When using a custom fieldName, doing something like `schema[model].fields[field]` will not work.
+     */
+    const getDefaultFieldName = ({
+      field,
+      model: unsafe_model,
+    }: { model: string, field: string }) => {
+      // Plugin `schema`s can't define their own `id`. Better-auth auto provides `id` to every schema model.
+      // Given this, we can't just check if the `field` (that being `id`) is within the schema's fields, since it is never defined.
+      // So we check if the `field` is `id` and if so, we return `id` itself. Otherwise, we return the `field` from the schema.
+      if (field === 'id') {
+        return field
+      }
+      const model = getDefaultModelName(unsafe_model) // Just to make sure the model name is correct.
+
+      let f = schema[model]?.fields[field]
+      if (!f) {
+        // @ts-expect-error
+        f = Object.values(schema[model]?.fields).find(
+          f => f.fieldName === field,
+        )
+      }
+      if (!f) {
+        debugLog(`Field ${field} not found in model ${model}`)
+        debugLog(`Schema:`, schema)
+        throw new Error(`Field ${field} not found in model ${model}`)
+      }
+      return field
     }
 
     /**
@@ -329,8 +329,7 @@ export function createAdapter({
         const value = data[field]
         const fieldAttributes = fields[field]
 
-        const newFieldName: string
-					= newMappedKeys[field] || fields[field].fieldName || field
+        const newFieldName: string = newMappedKeys[field] || fields[field].fieldName || field
         if (
           value === undefined
           && ((!fieldAttributes.defaultValue
@@ -422,12 +421,11 @@ export function createAdapter({
         if (field) {
           const originalKey = field.fieldName || key
           // If the field is mapped, we'll use the mapped key. Otherwise, we'll use the original key.
-          let newValue
-						= data[
-						  Object.entries(newMappedKeys).find(
-						    ([_, v]) => v === originalKey,
-						  )?.[0] || originalKey
-						]
+          let newValue = data[
+            Object.entries(newMappedKeys).find(
+              ([_, v]) => v === originalKey,
+            )?.[0] || originalKey
+          ]
 
           if (field.transform?.output) {
             newValue = await field.transform.output(newValue)
@@ -913,49 +911,10 @@ export function createAdapter({
         ? async (_, file) => {
           const tables = getAuthTables(options)
 
-          if (
-            options.secondaryStorage
-            && !options.session?.storeSessionInDatabase
-          ) {
-            // biome-ignore lint/performance/noDelete: If the user has enabled secondaryStorage, as well as not specifying to store session table in DB, then createSchema shouldn't generate schema table.
-            delete tables.session
-          }
+          // TODO: better-auth options.secondaryStorage callback support
 
-          if (
-            options.rateLimit
-            && options.rateLimit.storage === 'database'
-            // rate-limit will default to enabled in production,
-            // and given storage is database, it will try to use the rate-limit table,
-            // so we should make sure to generate rate-limit table schema
-            && (typeof options.rateLimit.enabled === 'undefined'
-            // and of course if they forcefully set to true, then they want rate-limit,
-            // thus we should also generate rate-limit table schema
-              || options.rateLimit.enabled === true)
-          ) {
-            tables.ratelimit = {
-              modelName: options.rateLimit.modelName ?? 'ratelimit',
-              fields: {
-                key: {
-                  type: 'string',
-                  unique: true,
-                  required: true,
-                  fieldName: options.rateLimit.fields?.key ?? 'key',
-                },
-                count: {
-                  type: 'number',
-                  required: true,
-                  fieldName: options.rateLimit.fields?.count ?? 'count',
-                },
-                lastRequest: {
-                  type: 'number',
-                  required: true,
-                  bigint: true,
-                  defaultValue: () => Date.now(),
-                  fieldName: options.rateLimit.fields?.lastRequest ?? 'lastRequest',
-                },
-              },
-            }
-          }
+          // TODO: better-auth options.rateLimit callback support
+
           return adapterInstance.createSchema!({ file, tables })
         }
         : undefined,
