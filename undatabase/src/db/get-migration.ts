@@ -2,10 +2,10 @@ import type {
   AlterTableColumnAlteringBuilder,
   CreateTableBuilder,
 } from 'kysely'
-import type { KyselyDatabaseType } from '../adapters/kysely-adapter/types'
+import type { KyselyDatabaseType } from '../adapters/kysely-adapter/types.ts'
 import type { BetterAuthOptions } from '../types/index.ts'
 import type { FieldAttribute, FieldType } from './index.ts'
-import { createKyselyAdapter } from '../adapters/kysely-adapter/dialect'
+import { createKyselyAdapter } from '../adapters/kysely-adapter/dialect.ts'
 import { createLogger } from '../utils/logger.ts'
 import { getSchema } from './get-schema.ts'
 
@@ -136,7 +136,7 @@ export async function getMigrations(config: BetterAuthOptions) {
       }
       continue
     }
-    let toBeAddedFields: Record<string, FieldAttribute> = {}
+    const toBeAddedFields: Record<string, FieldAttribute> = {}
     for (const [fieldName, field] of Object.entries(value.fields)) {
       const column = table.columns.find(c => c.name === fieldName)
       if (!column) {
@@ -178,12 +178,11 @@ export async function getMigrations(config: BetterAuthOptions) {
           : field.references
             ? 'varchar(36)'
             : 'text',
-        mssql:
-					field.unique || field.sortable
-					  ? 'varchar(255)'
-					  : field.references
-					    ? 'varchar(36)'
-					    : 'text',
+        mssql: field.unique || field.sortable
+          ? 'varchar(255)'
+          : field.references
+            ? 'varchar(36)'
+            : 'text',
       },
       boolean: {
         sqlite: 'integer',

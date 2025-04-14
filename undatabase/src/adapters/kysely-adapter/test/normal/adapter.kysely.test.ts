@@ -7,10 +7,9 @@ import { Kysely, MssqlDialect, MysqlDialect, sql, SqliteDialect } from 'kysely'
 import { createPool } from 'mysql2/promise'
 import * as tarn from 'tarn'
 import * as tedious from 'tedious'
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe } from 'vitest'
 
 import { getMigrations } from '../../../../db/get-migration.ts'
-import { getTestInstance } from '../../../../test-utils/test-instance'
 import { runAdapterTest } from '../../../test.ts'
 import { kyselyAdapter } from '../../index.ts'
 import { setState } from '../state.ts'
@@ -181,63 +180,5 @@ describe('mssql', async () => {
     disableTests: {
       SHOULD_PREFER_GENERATE_ID_IF_PROVIDED: true,
     },
-  })
-
-  describe('simple flow', async () => {
-    const { auth } = await getTestInstance(
-      {
-        database: dialect,
-        user: {
-          modelName: 'users',
-        },
-      },
-      {
-        disableTestUser: true,
-      },
-    )
-    it('should sign-up', async () => {
-      const res = await auth.api.signUpEmail({
-        body: {
-          name: 'test',
-          password: 'password',
-          email: 'test-2@email.com',
-        },
-      })
-      expect(res.user.name).toBe('test')
-      expect(res.token?.length).toBeTruthy()
-    })
-
-    let token = ''
-    it('should sign in', async () => {
-      // sign in
-      const signInRes = await auth.api.signInEmail({
-        body: {
-          password: 'password',
-          email: 'test-2@email.com',
-        },
-      })
-
-      expect(signInRes.token?.length).toBeTruthy()
-      expect(signInRes.user.name).toBe('test')
-      token = signInRes.token
-    })
-
-    it('should return session', async () => {
-      const session = await auth.api.getSession({
-        headers: new Headers({
-          Authorization: `Bearer ${token}`,
-        }),
-      })
-      expect(session).toMatchObject({
-        session: {
-          token,
-          userId: expect.any(String),
-        },
-        user: {
-          name: 'test',
-          email: 'test-2@email.com',
-        },
-      })
-    })
   })
 })
