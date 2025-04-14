@@ -1,0 +1,67 @@
+{
+  "name": "undatabase",
+  "type": "module",
+  "version": "0.0.1",
+  "description": "Undatabase is a database adapter for All projects.",
+  "author": "undatabase Team",
+  "license": "MIT",
+  "keywords": [
+    "auth",
+    "authentication",
+    "database",
+    "adapters",
+    "drizzle",
+    "prisma",
+    "kysely",
+    "mongodb",
+    "undatabase"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./providers/*": {
+      "types": "./dist/providers/*.d.mts",
+      "import": "./dist/providers/*.mjs"
+    },
+    "./types": {
+      "types": "./dist/types/index.d.mts",
+      "import": "./dist/types/index.mjs"
+    },
+    "./utils": {
+      "types": "./dist/utils/index.d.mts",
+      "import": "./dist/utils/index.mjs"
+    }
+  },
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "engines": {
+    "node": ">=20.11.1"
+  },
+  "scripts": {
+    "build": "unbuild",
+    "dev": "unbuild --stub",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "optionalDependencies": {
+    "@prisma/client": "^6.6.0",
+    "drizzle-orm": "^0.41.0",
+    "kysely": "^0.28.0",
+    "mongodb": "^6.15.0"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.12.0",
+    "@types/node": "^22.14.1",
+    "eslint": "^9.24.0",
+    "typescript": "^5.8.3",
+    "unbuild": "^3.5.0",
+    "vite-tsconfig-paths": "^5.1.4",
+    "vitest": "^3.1.1"
+  }
+}
