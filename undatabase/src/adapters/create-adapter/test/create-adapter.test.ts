@@ -2,8 +2,7 @@
 /* eslint-disable style/no-tabs */
 import type { BetterAuthOptions, User, Where } from '../../../types/index.ts'
 import type { AdapterConfig, CreateCustomAdapter } from '../types.ts'
-import { describe, expect } from 'vitest'
-import { betterAuth } from '../../../auth'
+import { describe, expect, it } from 'vitest'
 import { createAdapter } from '../index.ts'
 
 /*
@@ -118,12 +117,12 @@ async function createTestAdapter(
       }
     },
   })
-  const auth = betterAuth({
-    ...options,
-    database: testAdapter,
-  })
+  // const auth = betterAuth({
+  //   ...options,
+  //   database: testAdapter,
+  // })
 
-  return (await auth.$context).adapter
+  return testAdapter
 }
 
 describe('create Adapter Helper', async () => {
