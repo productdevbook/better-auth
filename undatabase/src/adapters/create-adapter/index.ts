@@ -561,6 +561,7 @@ export function createAdapter({
           logger.warn(
             `[${config.adapterName}] - You are trying to create a record with an id. This is not allowed as we handle id generation for you. The id will be ignored.`,
           )
+          // eslint-disable-next-line unicorn/error-message
           const err = new Error()
           const stack = err.stack
             ?.split('\n')
