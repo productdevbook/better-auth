@@ -165,7 +165,6 @@ describe('mssql', async () => {
   })
 
   async function resetDB() {
-    await sql`DROP TABLE dbo.session;`.execute(mssql)
     await sql`DROP TABLE dbo.verification;`.execute(mssql)
     await sql`DROP TABLE dbo.account;`.execute(mssql)
     await sql`DROP TABLE dbo.users;`.execute(mssql)

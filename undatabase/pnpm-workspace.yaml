@@ -1,1 +1,6 @@
-packages:
+packages: null
+onlyBuiltDependencies:
+  - better-sqlite3
+ignoredBuiltDependencies:
+  - '@prisma/client'
+  - esbuild

@@ -4,10 +4,9 @@ import { drizzle } from 'drizzle-orm/node-postgres'
 import { Kysely, PostgresDialect, sql } from 'kysely'
 import { Pool } from 'pg'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { drizzleAdapter } from '../index.ts'
-import { betterAuth } from '../../../auth'
-import { getMigrations } from '../../../db/get-migration'
+import { getMigrations } from '../../../db/get-migration.ts'
 import { runAdapterTest, runNumberIdAdapterTest } from '../../test.ts'
+import { drizzleAdapter } from '../index.ts'
 import * as schema from './schema.ts'
 
 const TEST_DB_URL = 'postgres://user:password@localhost:5432/better_auth'
@@ -96,26 +95,8 @@ describe('drizzle Adapter Authentication Flow Tests', async () => {
     await runMigrations()
   })
 
-  const auth = betterAuth({
-    ...opts,
-    database: drizzleAdapter(drizzle(pg), { provider: 'pg', schema }),
-    emailAndPassword: {
-      enabled: true,
-    },
-  })
-
   afterAll(async () => {
     await cleanupDatabase(postgres)
-  })
-
-  it('should successfully sign up a new user', async () => {
-    const user = await auth.api.signUpEmail({ body: testUser })
-    expect(user).toBeDefined()
-  })
-
-  it('should successfully sign in an existing user', async () => {
-    const user = await auth.api.signInEmail({ body: testUser })
-    expect(user.user).toBeDefined()
   })
 })
 

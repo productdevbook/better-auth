@@ -5,10 +5,9 @@ import { drizzle } from 'drizzle-orm/mysql2'
 import { Kysely, MysqlDialect } from 'kysely'
 import { createPool } from 'mysql2/promise'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { drizzleAdapter } from '../index.ts'
-import { betterAuth } from '../../../auth'
-import { getMigrations } from '../../../db/get-migration'
+import { getMigrations } from '../../../db/get-migration.ts'
 import { runAdapterTest, runNumberIdAdapterTest } from '../../test.ts'
+import { drizzleAdapter } from '../index.ts'
 import * as schema from './schema.mysql.ts'
 
 const TEST_DB_MYSQL_URL = 'mysql://user:password@localhost:3306/better_auth'
@@ -105,29 +104,6 @@ describe('drizzle Adapter Authentication Flow Tests (MySQL)', async () => {
   beforeAll(async () => {
     const { runMigrations } = await getMigrations(opts)
     await runMigrations()
-  })
-
-  const auth = betterAuth({
-    ...opts,
-    database: drizzleAdapter(drizzle({ client: pool }), {
-      provider: 'mysql',
-      schema,
-    }),
-    emailAndPassword: {
-      enabled: true,
-    },
-  })
-
-  it('should successfully sign up a new user', async () => {
-    const user = await auth.api.signUpEmail({ body: testUser })
-    expect(user).toBeDefined()
-    expect(user.user.id).toBeDefined()
-  })
-
-  it('should successfully sign in an existing user', async () => {
-    const user = await auth.api.signInEmail({ body: testUser })
-    expect(user.user).toBeDefined()
-    expect(user.user.id).toBeDefined()
   })
 })
 
