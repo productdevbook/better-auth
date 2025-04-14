@@ -329,7 +329,7 @@ export function createAdapter({
         const value = data[field]
         const fieldAttributes = fields[field]
 
-        let newFieldName: string
+        const newFieldName: string
 					= newMappedKeys[field] || fields[field].fieldName || field
         if (
           value === undefined
@@ -433,7 +433,7 @@ export function createAdapter({
             newValue = await field.transform.output(newValue)
           }
 
-          let newFieldName: string = newMappedKeys[key] || key
+          const newFieldName: string = newMappedKeys[key] || key
 
           if (originalKey === 'id' || field.references?.field === 'id') {
             // Even if `useNumberId` is true, we must always return a string `id` output.
@@ -616,7 +616,7 @@ export function createAdapter({
         update: Record<string, any>
       }): Promise<T | null> => {
         transactionId++
-        let thisTransactionId = transactionId
+        const thisTransactionId = transactionId
         const model = getModelName(unsafeModel)
         const where = transformWhereClause({
           model: unsafeModel,
@@ -718,7 +718,7 @@ export function createAdapter({
         select?: string[]
       }) => {
         transactionId++
-        let thisTransactionId = transactionId
+        const thisTransactionId = transactionId
         const model = getModelName(unsafeModel)
         const where = transformWhereClause({
           model: unsafeModel,
@@ -816,7 +816,7 @@ export function createAdapter({
         where: Where[]
       }) => {
         transactionId++
-        let thisTransactionId = transactionId
+        const thisTransactionId = transactionId
         const model = getModelName(unsafeModel)
         const where = transformWhereClause({
           model: unsafeModel,
@@ -847,7 +847,7 @@ export function createAdapter({
         where: Where[]
       }) => {
         transactionId++
-        let thisTransactionId = transactionId
+        const thisTransactionId = transactionId
         const model = getModelName(unsafeModel)
         const where = transformWhereClause({
           model: unsafeModel,
