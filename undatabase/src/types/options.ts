@@ -3,6 +3,7 @@ import type { Dialect, Kysely, MysqlPool, PostgresPool } from 'kysely'
 // import type { KyselyDatabaseType } from '../adapters/kysely-adapter/types'
 import type { FieldAttribute } from '../db/index.ts'
 import type {
+  Account,
   LiteralUnion,
   Models,
   OmitId,
@@ -111,134 +112,12 @@ export interface BetterAuthOptions {
    * This is used to store session and rate limit data.
    */
   secondaryStorage?: SecondaryStorage
-  /**
-   * Email verification configuration
-   */
-  emailVerification?: {
-    /**
-     * Send a verification email
-     * @param data the data object
-     * @param request the request object
-     */
-    sendVerificationEmail?: (
-    /**
-     * @param user the user to send the
-     * verification email to
-     * @param url the URL to send the verification email to
-     * it contains the token as well
-     * @param token the token to send the verification email to
-     */
-      data: {
-        user: User
-        url: string
-        token: string
-      },
-    /**
-     * The request object
-     */
-      request?: Request,
-    ) => Promise<void>
-    /**
-     * Send a verification email automatically
-     * after sign up
-     *
-     * @default false
-     */
-    sendOnSignUp?: boolean
-    /**
-     * Auto signin the user after they verify their email
-     */
-    autoSignInAfterVerification?: boolean
 
-    /**
-     * Number of seconds the verification token is
-     * valid for.
-     * @default 3600 seconds (1 hour)
-     */
-    expiresIn?: number
-    /**
-     * A function that is called when a user verifies their email
-     * @param user the user that verified their email
-     * @param request the request object
-     */
-    onEmailVerification?: (user: User, request?: Request) => Promise<void>
+  account?: {
+    modelName?: string
+    fields?: Partial<Record<keyof OmitId<Account>, string>>
   }
-  /**
-   * Email and password authentication
-   */
-  emailAndPassword?: {
-    /**
-     * Enable email and password authentication
-     *
-     * @default false
-     */
-    enabled: boolean
-    /**
-     * Disable email and password sign up
-     *
-     * @default false
-     */
-    disableSignUp?: boolean
-    /**
-     * Require email verification before a session
-     * can be created for the user.
-     *
-     * if the user is not verified, the user will not be able to sign in
-     * and on sign in attempts, the user will be prompted to verify their email.
-     */
-    requireEmailVerification?: boolean
-    /**
-     * The maximum length of the password.
-     *
-     * @default 128
-     */
-    maxPasswordLength?: number
-    /**
-     * The minimum length of the password.
-     *
-     * @default 8
-     */
-    minPasswordLength?: number
-    /**
-     * send reset password
-     */
-    sendResetPassword?: (
-    /**
-     * @param user the user to send the
-     * reset password email to
-     * @param url the URL to send the reset password email to
-     * @param token the token to send to the user (could be used instead of sending the url
-     * if you need to redirect the user to custom route)
-     */
-      data: { user: User, url: string, token: string },
-    /**
-     * The request object
-     */
-      request?: Request,
-    ) => Promise<void>
-    /**
-     * Number of seconds the reset password token is
-     * valid for.
-     * @default 1 hour (60 * 60)
-     */
-    resetPasswordTokenExpiresIn?: number
-    /**
-     * Password hashing and verification
-     *
-     * By default Scrypt is used for password hashing and
-     * verification. You can provide your own hashing and
-     * verification function. if you want to use a
-     * different algorithm.
-     */
-    password?: {
-      hash?: (password: string) => Promise<string>
-      verify?: (data: { hash: string, password: string }) => Promise<boolean>
-    }
-    /**
-     * Automatically sign in the user after sign up
-     */
-    autoSignIn?: boolean
-  }
+
   /**
    * User configuration
    */
@@ -264,72 +143,6 @@ export interface BetterAuthOptions {
     additionalFields?: {
       [key: string]: FieldAttribute
     }
-    /**
-     * Changing email configuration
-     */
-    changeEmail?: {
-      /**
-       * Enable changing email
-       * @default false
-       */
-      enabled: boolean
-      /**
-       * Send a verification email when the user changes their email.
-       * @param data the data object
-       * @param request the request object
-       */
-      sendChangeEmailVerification?: (
-        data: {
-          user: User
-          newEmail: string
-          url: string
-          token: string
-        },
-        request?: Request,
-      ) => Promise<void>
-    }
-    /**
-     * User deletion configuration
-     */
-    deleteUser?: {
-      /**
-       * Enable user deletion
-       */
-      enabled?: boolean
-      /**
-       * Send a verification email when the user deletes their account.
-       *
-       * if this is not set, the user will be deleted immediately.
-       * @param data the data object
-       * @param request the request object
-       */
-      sendDeleteAccountVerification?: (
-        data: {
-          user: User
-          url: string
-          token: string
-        },
-        request?: Request,
-      ) => Promise<void>
-      /**
-       * A function that is called before a user is deleted.
-       *
-       * to interrupt with error you can throw `APIError`
-       */
-      beforeDelete?: (user: User, request?: Request) => Promise<void>
-      /**
-       * A function that is called after a user is deleted.
-       *
-       * This is useful for cleaning up user data
-       */
-      afterDelete?: (user: User, request?: Request) => Promise<void>
-      /**
-       * The expiration time for the delete token.
-       *
-       * @default 1 day (60 * 60 * 24) in seconds
-       */
-      deleteTokenExpiresIn?: number
-    }
   }
   session?: {
     /**
@@ -349,82 +162,11 @@ export interface BetterAuthOptions {
      */
     fields?: Partial<Record<keyof OmitId<Session>, string>>
     /**
-     * Expiration time for the session token. The value
-     * should be in seconds.
-     * @default 7 days (60 * 60 * 24 * 7)
-     */
-    expiresIn?: number
-    /**
-     * How often the session should be refreshed. The value
-     * should be in seconds.
-     * If set 0 the session will be refreshed every time it is used.
-     * @default 1 day (60 * 60 * 24)
-     */
-    updateAge?: number
-    /**
-     * Disable session refresh so that the session is not updated
-     * regardless of the `updateAge` option.
-     *
-     * @default false
-     */
-    disableSessionRefresh?: boolean
-    /**
      * Additional fields for the session
      */
     additionalFields?: {
       [key: string]: FieldAttribute
     }
-    /**
-     * By default if secondary storage is provided
-     * the session is stored in the secondary storage.
-     *
-     * Set this to true to store the session in the database
-     * as well.
-     *
-     * Reads are always done from the secondary storage.
-     *
-     * @default false
-     */
-    storeSessionInDatabase?: boolean
-    /**
-     * By default, sessions are deleted from the database when secondary storage
-     * is provided when session is revoked.
-     *
-     * Set this to true to preserve session records in the database,
-     * even if they are deleted from the secondary storage.
-     *
-     * @default false
-     */
-    preserveSessionInDatabase?: boolean
-    /**
-     * Enable caching session in cookie
-     */
-    cookieCache?: {
-      /**
-       * max age of the cookie
-       * @default 5 minutes (5 * 60)
-       */
-      maxAge?: number
-      /**
-       * Enable caching session in cookie
-       * @default false
-       */
-      enabled?: boolean
-    }
-    /**
-     * The age of the session to consider it fresh.
-     *
-     * This is used to check if the session is fresh
-     * for sensitive operations. (e.g. deleting an account)
-     *
-     * If the session is not fresh, the user should be prompted
-     * to sign in again.
-     *
-     * If set to 0, the session will be considered fresh every time. (⚠︎ not recommended)
-     *
-     * @default 1 day (60 * 60 * 24)
-     */
-    freshAge?: number
   }
   /**
    * Verification configuration
@@ -438,70 +180,11 @@ export interface BetterAuthOptions {
      * Map verification fields
      */
     fields?: Partial<Record<keyof OmitId<Verification>, string>>
-    /**
-     * disable cleaning up expired values when a verification value is
-     * fetched
-     */
-    disableCleanup?: boolean
   }
   /**
    * Advanced options
    */
   advanced?: {
-    /**
-     * Ip address configuration
-     */
-    ipAddress?: {
-      /**
-       * List of headers to use for ip address
-       *
-       * Ip address is used for rate limiting and session tracking
-       *
-       * @example ["x-client-ip", "x-forwarded-for"]
-       *
-       * @default
-       * @link https://github.com/better-auth/better-auth/blob/main/packages/better-auth/src/utils/get-request-ip.ts#L8
-       */
-      ipAddressHeaders?: string[]
-      /**
-       * Disable ip tracking
-       *
-       * ⚠︎ This is a security risk and it may expose your application to abuse
-       */
-      disableIpTracking?: boolean
-    }
-    /**
-     * Use secure cookies
-     *
-     * @default false
-     */
-    useSecureCookies?: boolean
-    /**
-     * Disable trusted origins check
-     *
-     * ⚠︎ This is a security risk and it may expose your application to CSRF attacks
-     */
-    disableCSRFCheck?: boolean
-    /**
-     * Configure cookies to be cross subdomains
-     */
-    crossSubDomainCookies?: {
-      /**
-       * Enable cross subdomain cookies
-       */
-      enabled: boolean
-      /**
-       * Additional cookies to be shared across subdomains
-       */
-      additionalCookies?: string[]
-      /**
-       * The domain to use for the cookies
-       *
-       * By default, the domain will be the root
-       * domain from the base URL.
-       */
-      domain?: string
-    }
     /**
      * Database configuration.
      */

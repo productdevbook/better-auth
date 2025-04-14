@@ -47,81 +47,7 @@ export function getAuthTables(options: BetterAuthOptions): BetterAuthDbSchema {
     >,
   )
 
-  const shouldAddRateLimitTable = options.rateLimit?.storage === 'database'
-  const rateLimitTable = {
-    rateLimit: {
-      modelName: options.rateLimit?.modelName || 'rateLimit',
-      fields: {
-        key: {
-          type: 'string',
-          fieldName: options.rateLimit?.fields?.key || 'key',
-        },
-        count: {
-          type: 'number',
-          fieldName: options.rateLimit?.fields?.count || 'count',
-        },
-        lastRequest: {
-          type: 'number',
-          bigint: true,
-          fieldName: options.rateLimit?.fields?.lastRequest || 'lastRequest',
-        },
-      },
-    },
-  } satisfies BetterAuthDbSchema
-
   const { user, session, account, ...pluginTables } = pluginSchema || {}
-
-  const sessionTable = {
-    session: {
-      modelName: options.session?.modelName || 'session',
-      fields: {
-        expiresAt: {
-          type: 'date',
-          required: true,
-          fieldName: options.session?.fields?.expiresAt || 'expiresAt',
-        },
-        token: {
-          type: 'string',
-          required: true,
-          fieldName: options.session?.fields?.token || 'token',
-          unique: true,
-        },
-        createdAt: {
-          type: 'date',
-          required: true,
-          fieldName: options.session?.fields?.createdAt || 'createdAt',
-        },
-        updatedAt: {
-          type: 'date',
-          required: true,
-          fieldName: options.session?.fields?.updatedAt || 'updatedAt',
-        },
-        ipAddress: {
-          type: 'string',
-          required: false,
-          fieldName: options.session?.fields?.ipAddress || 'ipAddress',
-        },
-        userAgent: {
-          type: 'string',
-          required: false,
-          fieldName: options.session?.fields?.userAgent || 'userAgent',
-        },
-        userId: {
-          type: 'string',
-          fieldName: options.session?.fields?.userId || 'userId',
-          references: {
-            model: options.user?.modelName || 'user',
-            field: 'id',
-            onDelete: 'cascade',
-          },
-          required: true,
-        },
-        ...session?.fields,
-        ...options.session?.additionalFields,
-      },
-      order: 2,
-    },
-  } satisfies BetterAuthDbSchema
 
   return {
     user: {
@@ -168,10 +94,6 @@ export function getAuthTables(options: BetterAuthOptions): BetterAuthDbSchema {
       },
       order: 1,
     },
-    // only add session table if it's not stored in secondary storage
-    ...(!options.secondaryStorage || options.session?.storeSessionInDatabase
-      ? sessionTable
-      : {}),
     account: {
       modelName: options.account?.modelName || 'account',
       fields: {
@@ -213,16 +135,14 @@ export function getAuthTables(options: BetterAuthOptions): BetterAuthDbSchema {
         accessTokenExpiresAt: {
           type: 'date',
           required: false,
-          fieldName:
-						options.account?.fields?.accessTokenExpiresAt
-						|| 'accessTokenExpiresAt',
+          fieldName: options.account?.fields?.accessTokenExpiresAt
+            || 'accessTokenExpiresAt',
         },
         refreshTokenExpiresAt: {
           type: 'date',
           required: false,
-          fieldName:
-						options.account?.fields?.accessTokenExpiresAt
-						|| 'refreshTokenExpiresAt',
+          fieldName: options.account?.fields?.accessTokenExpiresAt
+            || 'refreshTokenExpiresAt',
         },
         scope: {
           type: 'string',
@@ -282,6 +202,5 @@ export function getAuthTables(options: BetterAuthOptions): BetterAuthDbSchema {
       order: 4,
     },
     ...pluginTables,
-    ...(shouldAddRateLimitTable ? rateLimitTable : {}),
   } satisfies BetterAuthDbSchema
 }
