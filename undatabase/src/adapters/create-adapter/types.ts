@@ -1,4 +1,4 @@
-import type { BetterAuthDbSchema } from '../../db/get-tables'
+import type { BetterAuthDbSchema } from '../../db/get-tables.ts'
 import type { FieldAttribute } from '../../db/index.ts'
 import type { Prettify } from '../../types/helper.ts'
 import type {

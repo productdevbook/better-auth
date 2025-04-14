@@ -6,12 +6,14 @@ import type { FieldAttribute } from '../db/index.ts'
 import type {
   LiteralUnion,
   Models,
+  OmitId,
   Session,
   User,
   Verification,
 } from '../types/index.ts'
 import type { Logger } from '../utils/index.ts'
 import type { AdapterInstance, SecondaryStorage } from './adapter.ts'
+import type { AuthPluginSchema } from './plugins.ts'
 
 export interface BetterAuthOptions {
   /**
@@ -22,6 +24,10 @@ export interface BetterAuthOptions {
    * @default "Better Auth"
    */
   appName?: string
+
+  plugins?: {
+    schema?: AuthPluginSchema;
+  }[]
   /**
    * Base URL for the Better Auth. This is typically the
    * root URL where your application server is hosted.
@@ -438,89 +444,6 @@ export interface BetterAuthOptions {
      * fetched
      */
     disableCleanup?: boolean
-  }
-  /**
-   * List of trusted origins.
-   */
-  trustedOrigins?:
-    | string[]
-    | ((request: Request) => string[] | Promise<string[]>)
-  /**
-   * Rate limiting configuration
-   */
-  rateLimit?: {
-    /**
-     * By default, rate limiting is only
-     * enabled on production.
-     */
-    enabled?: boolean
-    /**
-     * Default window to use for rate limiting. The value
-     * should be in seconds.
-     *
-     * @default 10 seconds
-     */
-    window?: number
-    /**
-     * The default maximum number of requests allowed within the window.
-     *
-     * @default 100 requests
-     */
-    max?: number
-    /**
-     * Custom rate limit rules to apply to
-     * specific paths.
-     */
-    customRules?: {
-      [key: string]:
-        | {
-          /**
-           * The window to use for the custom rule.
-           */
-          window: number
-          /**
-           * The maximum number of requests allowed within the window.
-           */
-          max: number
-        }
-        | ((request: Request) =>
-          | { window: number, max: number }
-          | Promise<{
-            window: number
-            max: number
-          }>)
-    }
-    /**
-     * Storage configuration
-     *
-     * By default, rate limiting is stored in memory. If you passed a
-     * secondary storage, rate limiting will be stored in the secondary
-     * storage.
-     *
-     * @default "memory"
-     */
-    storage?: 'memory' | 'database' | 'secondary-storage'
-    /**
-     * If database is used as storage, the name of the table to
-     * use for rate limiting.
-     *
-     * @default "rateLimit"
-     */
-    modelName?: string
-    /**
-     * Custom field names for the rate limit table
-     */
-    fields?: Record<keyof RateLimit, string>
-    /**
-     * custom storage configuration.
-     *
-     * NOTE: If custom storage is used storage
-     * is ignored
-     */
-    customStorage?: {
-      get: (key: string) => Promise<RateLimit | undefined>
-      set: (key: string, value: RateLimit) => Promise<void>
-    }
   }
   /**
    * Advanced options
