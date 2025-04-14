@@ -16,7 +16,7 @@ import {
   or,
   sql,
 } from 'drizzle-orm'
-import { BetterAuthError } from '../../error'
+import { BetterAuthError } from '../../error/index.ts'
 import { createAdapter } from '../create-adapter/index.ts'
 
 export interface DB {
