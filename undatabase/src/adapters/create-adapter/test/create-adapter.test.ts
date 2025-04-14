@@ -117,12 +117,11 @@ async function createTestAdapter(
       }
     },
   })
-  // const auth = betterAuth({
-  //   ...options,
-  //   database: testAdapter,
-  // })
 
-  return testAdapter
+  return testAdapter({
+    ...options,
+    database: testAdapter,
+  })
 }
 
 describe('create Adapter Helper', async () => {
@@ -132,7 +131,6 @@ describe('create Adapter Helper', async () => {
       adapterId,
     },
   })
-
   it('should have the correct adapter id', () => {
     expect(adapter.id).toBe(adapterId)
   })
@@ -157,7 +155,6 @@ describe('create Adapter Helper', async () => {
       data: { name: 'test-name' },
     })
     expect(res).toHaveProperty('id')
-    // @ts-ignore
     expect(res.id).toBe('HARD-CODED-ID')
   })
 
