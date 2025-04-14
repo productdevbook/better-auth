@@ -105,7 +105,7 @@ export type FieldAttribute<T extends FieldType = FieldType> = {
 export function createFieldAttribute<
   T extends FieldType,
   C extends Omit<FieldAttributeConfig<T>, 'type'>,
->(type: T,	config?: C) {
+>(type: T, config?: C) {
   return {
     type,
     ...config,
@@ -131,39 +131,37 @@ export type InferValueType<T extends FieldType> = T extends 'string'
 export type InferFieldsOutput<Field> = Field extends Record<
   infer Key,
   FieldAttribute
->
-  ? {
-    [key in Key as Field[key]['required'] extends false
-      ? Field[key]['defaultValue'] extends boolean | string | number | Date
-        ? key
-        : never
-      : key]: InferFieldOutput<Field[key]>;
-  } & {
-    [key in Key as Field[key]['returned'] extends false
-      ? never
-      : key]?: InferFieldOutput<Field[key]> | null;
-  }
-  : {}
+> ? {
+  [key in Key as Field[key]['required'] extends false
+    ? Field[key]['defaultValue'] extends boolean | string | number | Date
+      ? key
+      : never
+    : key]: InferFieldOutput<Field[key]>;
+} & {
+  [key in Key as Field[key]['returned'] extends false
+    ? never
+    : key]?: InferFieldOutput<Field[key]> | null;
+}
+  : object
 
 export type InferFieldsInput<Field> = Field extends Record<
   infer Key,
   FieldAttribute
->
-  ? {
-    [key in Key as Field[key]['required'] extends false
+> ? {
+  [key in Key as Field[key]['required'] extends false
+    ? never
+    : Field[key]['defaultValue'] extends string | number | boolean | Date
       ? never
-      : Field[key]['defaultValue'] extends string | number | boolean | Date
+      : Field[key]['input'] extends false
         ? never
-        : Field[key]['input'] extends false
-          ? never
-          : key]: InferFieldInput<Field[key]>;
-  } & {
-    [key in Key as Field[key]['input'] extends false ? never : key]?:
-      | InferFieldInput<Field[key]>
-      | undefined
-      | null;
-  }
-  : {}
+        : key]: InferFieldInput<Field[key]>;
+} & {
+  [key in Key as Field[key]['input'] extends false ? never : key]?:
+    | InferFieldInput<Field[key]>
+    | undefined
+    | null;
+}
+  : object
 
 /**
  * For client will add "?" on optional fields
@@ -171,25 +169,24 @@ export type InferFieldsInput<Field> = Field extends Record<
 export type InferFieldsInputClient<Field> = Field extends Record<
   infer Key,
   FieldAttribute
->
-  ? {
-    [key in Key as Field[key]['required'] extends false
+> ? {
+  [key in Key as Field[key]['required'] extends false
+    ? never
+    : Field[key]['defaultValue'] extends string | number | boolean | Date
       ? never
-      : Field[key]['defaultValue'] extends string | number | boolean | Date
+      : Field[key]['input'] extends false
         ? never
-        : Field[key]['input'] extends false
-          ? never
-          : key]: InferFieldInput<Field[key]>;
-  } & {
-    [key in Key as Field[key]['input'] extends false
-      ? never
-      : Field[key]['required'] extends false
+        : key]: InferFieldInput<Field[key]>;
+} & {
+  [key in Key as Field[key]['input'] extends false
+    ? never
+    : Field[key]['required'] extends false
+      ? key
+      : Field[key]['defaultValue'] extends string | number | boolean | Date
         ? key
-        : Field[key]['defaultValue'] extends string | number | boolean | Date
-          ? key
-          : never]?: InferFieldInput<Field[key]> | undefined | null;
-  }
-  : {}
+        : never]?: InferFieldInput<Field[key]> | undefined | null;
+}
+  : object
 
 type InferFieldOutput<T extends FieldAttribute> = T['returned'] extends false
   ? never
@@ -201,7 +198,7 @@ type InferFieldInput<T extends FieldAttribute> = InferValueType<T['type']>
 
 export type PluginFieldAttribute = Omit<
   FieldAttribute,
-	'transform' | 'defaultValue' | 'hashValue'
+'transform' | 'defaultValue' | 'hashValue'
 >
 
 export type InferFieldsFromPlugins<
@@ -219,8 +216,8 @@ export type InferFieldsFromPlugins<
     ? Format extends 'output'
       ? InferFieldsOutput<Field>
       : InferFieldsInput<Field>
-    : {}
-  : {}
+    : object
+  : object
 
 export type InferFieldsFromOptions<
   Options extends BetterAuthOptions,
@@ -232,4 +229,4 @@ export type InferFieldsFromOptions<
   ? Format extends 'output'
     ? InferFieldsOutput<Field>
     : InferFieldsInput<Field>
-  : {}
+  : object

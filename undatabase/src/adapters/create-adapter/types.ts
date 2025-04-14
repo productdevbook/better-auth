@@ -113,7 +113,7 @@ export interface AdapterConfig {
    *
    * ```ts
    * mapKeysTransformInput: {
-   *	id: "_id" // We want to replace `id` to `_id` to save into MongoDB
+   *id: "_id" // We want to replace `id` to `_id` to save into MongoDB
    * }
    * ```
    */
@@ -133,7 +133,7 @@ export interface AdapterConfig {
    *
    * ```ts
    * mapKeysTransformOutput: {
-   * 	_id: "id" // In MongoDB, we save `id` as `_id`. So we want to replace `_id` with `id` when we get the data back.
+   * _id: "id" // In MongoDB, we save `id` as `_id`. So we want to replace `_id` with `id` when we get the data back.
    * }
    * ```
    */
@@ -218,7 +218,7 @@ export interface AdapterConfig {
    *
    * ```ts
    * customIdGenerator: ({ model }) => {
-   * 	return "my-super-unique-id";
+   * return "my-super-unique-id";
    * }
    * ```
    */

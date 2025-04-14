@@ -20,8 +20,7 @@ interface NumberIdAdapterTestOptions {
 
 const adapterTests = {
   CREATE_MODEL: 'create model',
-  CREATE_MODEL_SHOULD_ALWAYS_RETURN_AN_ID:
-		'create model should always return an id',
+  CREATE_MODEL_SHOULD_ALWAYS_RETURN_AN_ID: 'create model should always return an id',
   FIND_MODEL: 'find model',
   FIND_MODEL_WITHOUT_ID: 'find model without id',
   FIND_MODEL_WITH_SELECT: 'find model with select',
@@ -37,11 +36,9 @@ const adapterTests = {
   SHOULD_UPDATE_WITH_MULTIPLE_WHERE: 'should update with multiple where',
   DELETE_MODEL: 'delete model',
   SHOULD_DELETE_MANY: 'should delete many',
-  SHOULD_NOT_THROW_ON_DELETE_RECORD_NOT_FOUND:
-		'shouldn\'t throw on delete record not found',
+  SHOULD_NOT_THROW_ON_DELETE_RECORD_NOT_FOUND: 'shouldn\'t throw on delete record not found',
   SHOULD_NOT_THROW_ON_RECORD_NOT_FOUND: 'shouldn\'t throw on record not found',
-  SHOULD_FIND_MANY_WITH_CONTAINS_OPERATOR:
-		'should find many with contains operator',
+  SHOULD_FIND_MANY_WITH_CONTAINS_OPERATOR: 'should find many with contains operator',
   SHOULD_SEARCH_USERS_WITH_STARTS_WITH: 'should search users with startsWith',
   SHOULD_SEARCH_USERS_WITH_ENDS_WITH: 'should search users with endsWith',
   SHOULD_PREFER_GENERATE_ID_IF_PROVIDED: 'should prefer generateId if provided',
@@ -51,8 +48,7 @@ const { ...numberIdAdapterTestsCopy } = adapterTests
 
 const numberIdAdapterTests = {
   ...numberIdAdapterTestsCopy,
-  SHOULD_RETURN_A_NUMBER_ID_AS_A_RESULT:
-		'Should return a number id as a result',
+  SHOULD_RETURN_A_NUMBER_ID_AS_A_RESULT: 'Should return a number id as a result',
   SHOULD_INCREMENT_THE_ID_BY_1: 'Should increment the id by 1',
 } as const
 
@@ -745,16 +741,13 @@ async function adapterTest(
         printDebugLogs()
       })
       const customAdapter = await getAdapter(
-        Object.assign(
-					{
-					  advanced: {
-					    database: {
-					      generateId: () => 'mocked-id',
-					    },
-					  },
-					} satisfies BetterAuthOptions,
-					internalOptions?.predefinedOptions,
-        ),
+        Object.assign({
+          advanced: {
+            database: {
+              generateId: () => 'mocked-id',
+            },
+          },
+        } satisfies BetterAuthOptions, internalOptions?.predefinedOptions),
       )
 
       const res = await customAdapter.create({
