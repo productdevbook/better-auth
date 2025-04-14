@@ -40,9 +40,6 @@ function createTestOptions(pg: Pool, useNumberId = false) {
         },
       },
     },
-    session: {
-      modelName: 'sessions',
-    },
     advanced: {
       database: {
         useNumberId,

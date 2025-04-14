@@ -23,6 +23,9 @@ importers:
       deepmerge:
         specifier: ^4.3.1
         version: 4.3.1
+      drizzle-orm:
+        specifier: ^0.41.0
+        version: 0.41.0(@prisma/client@6.6.0(typescript@5.8.3))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.9.1)(kysely@0.28.0)(mysql2@3.14.0)
       eslint:
         specifier: ^9.24.0
         version: 9.24.0(jiti@2.4.2)
@@ -51,9 +54,6 @@ importers:
       '@prisma/client':
         specifier: ^6.6.0
         version: 6.6.0(typescript@5.8.3)
-      drizzle-orm:
-        specifier: ^0.41.0
-        version: 0.41.0(@prisma/client@6.6.0(typescript@5.8.3))(@types/better-sqlite3@7.6.13)(better-sqlite3@11.9.1)(kysely@0.28.0)(mysql2@3.14.0)
       kysely:
         specifier: ^0.28.0
         version: 0.28.0
@@ -4108,7 +4108,6 @@ snapshots:
       better-sqlite3: 11.9.1
       kysely: 0.28.0
       mysql2: 3.14.0
-    optional: true
 
   ecdsa-sig-formatter@1.0.11:
     dependencies:

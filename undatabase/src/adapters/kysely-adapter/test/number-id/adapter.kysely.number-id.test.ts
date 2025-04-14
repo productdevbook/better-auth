@@ -29,9 +29,6 @@ export function opts({
         },
       },
     },
-    session: {
-      modelName: 'sessions',
-    },
     advanced: {
       database: {
         useNumberId: isNumberIdTest,

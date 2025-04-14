@@ -144,30 +144,6 @@ export interface BetterAuthOptions {
       [key: string]: FieldAttribute
     }
   }
-  session?: {
-    /**
-     * The model name for the session.
-     *
-     * @default "session"
-     */
-    modelName?: string
-    /**
-     * Map fields
-     *
-     * @example
-     * ```ts
-     * {
-     *  userId: "user_id"
-     * }
-     */
-    fields?: Partial<Record<keyof OmitId<Session>, string>>
-    /**
-     * Additional fields for the session
-     */
-    additionalFields?: {
-      [key: string]: FieldAttribute
-    }
-  }
   /**
    * Verification configuration
    */

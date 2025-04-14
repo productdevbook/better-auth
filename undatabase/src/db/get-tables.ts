@@ -47,7 +47,7 @@ export function getAuthTables(options: BetterAuthOptions): BetterAuthDbSchema {
     >,
   )
 
-  const { user, session, account, ...pluginTables } = pluginSchema || {}
+  const { user, account, ...pluginTables } = pluginSchema || {}
 
   return {
     user: {

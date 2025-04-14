@@ -49,9 +49,6 @@ function createTestOptions(pool: any, useNumberId = false) {
         },
       },
     },
-    session: {
-      modelName: 'sessions',
-    },
     advanced: {
       database: {
         useNumberId,

@@ -1,4 +1,4 @@
-import type { Account, Session, User } from '../types/index.ts'
+import type { Account, User } from '../types/index.ts'
 import type { BetterAuthOptions } from '../types/options.ts'
 import type { AuthPluginSchema } from '../types/plugins.ts'
 import type { FieldAttribute } from './index.ts'
@@ -43,17 +43,6 @@ export const userSchema = z.object({
   updatedAt: z.date().default(() => new Date()),
 })
 
-export const sessionSchema = z.object({
-  id: z.string(),
-  userId: z.coerce.string(),
-  expiresAt: z.date(),
-  createdAt: z.date().default(() => new Date()),
-  updatedAt: z.date().default(() => new Date()),
-  token: z.string(),
-  ipAddress: z.string().nullish(),
-  userAgent: z.string().nullish(),
-})
-
 export const verificationSchema = z.object({
   id: z.string(),
   value: z.string(),
@@ -88,7 +77,6 @@ export function parseOutputData<T extends Record<string, any>>(
 export function getAllFields(options: BetterAuthOptions, table: string) {
   let schema: Record<string, FieldAttribute> = {
     ...(table === 'user' ? options.user?.additionalFields : {}),
-    ...(table === 'session' ? options.session?.additionalFields : {}),
   }
   for (const plugin of options.plugins || []) {
     if (plugin.schema && plugin.schema[table]) {
@@ -112,14 +100,6 @@ export function parseAccountOutput(
 ) {
   const schema = getAllFields(options, 'account')
   return parseOutputData(account, { fields: schema })
-}
-
-export function parseSessionOutput(
-  options: BetterAuthOptions,
-  session: Session,
-) {
-  const schema = getAllFields(options, 'session')
-  return parseOutputData(session, { fields: schema })
 }
 
 export function parseInputData<T extends Record<string, any>>(
@@ -190,14 +170,6 @@ export function parseAccountInput(
 ) {
   const schema = getAllFields(options, 'account')
   return parseInputData(account, { fields: schema })
-}
-
-export function parseSessionInput(
-  options: BetterAuthOptions,
-  session: Partial<Session>,
-) {
-  const schema = getAllFields(options, 'session')
-  return parseInputData(session, { fields: schema })
 }
 
 export function mergeSchema<S extends AuthPluginSchema>(

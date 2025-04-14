@@ -1,7 +1,6 @@
 import type { z } from 'zod'
 import type {
   accountSchema,
-  sessionSchema,
   userSchema,
   verificationSchema,
 } from '../db/schema.ts'
@@ -9,7 +8,6 @@ import type {
 export type Models =
   | 'user'
   | 'account'
-  | 'session'
   | 'verification'
   | 'rate-limit'
   | 'organization'
@@ -36,6 +34,5 @@ interface RateLimit {
 
 export type User = z.infer<typeof userSchema>
 export type Account = z.infer<typeof accountSchema>
-export type Session = z.infer<typeof sessionSchema>
 export type Verification = z.infer<typeof verificationSchema>
 export type { RateLimit }
