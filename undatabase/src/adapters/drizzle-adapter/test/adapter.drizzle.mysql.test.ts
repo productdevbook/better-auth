@@ -89,21 +89,6 @@ describe('drizzle Adapter Tests (MySQL)', async () => {
   })
 })
 
-describe('drizzle Adapter Authentication Flow Tests (MySQL)', async () => {
-  const pool = createTestPool()
-  const opts = createTestOptions(pool)
-  const testUser = {
-    email: 'test-email@email.com',
-    password: 'password',
-    name: 'Test Name',
-  }
-
-  beforeAll(async () => {
-    const { runMigrations } = await getMigrations(opts)
-    await runMigrations()
-  })
-})
-
 describe('drizzle Adapter Number Id Test (MySQL)', async () => {
   let pool: any
   let mysql: Kysely<any>

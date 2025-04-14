@@ -76,27 +76,6 @@ describe('drizzle Adapter Tests', async () => {
   })
 })
 
-describe('drizzle Adapter Authentication Flow Tests', async () => {
-  const pg = createTestPool()
-  let postgres: Kysely<any>
-  const opts = createTestOptions(pg)
-  const testUser = {
-    email: 'test-email@email.com',
-    password: 'password',
-    name: 'Test Name',
-  }
-  beforeAll(async () => {
-    postgres = createKyselyInstance(pg)
-
-    const { runMigrations } = await getMigrations(opts)
-    await runMigrations()
-  })
-
-  afterAll(async () => {
-    await cleanupDatabase(postgres)
-  })
-})
-
 describe('drizzle Adapter Number Id Test', async () => {
   let pg: Pool
   let postgres: Kysely<any>
