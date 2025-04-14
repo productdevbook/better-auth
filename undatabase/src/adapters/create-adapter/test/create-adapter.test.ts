@@ -143,7 +143,7 @@ describe('create Adapter Helper', async () => {
       options: {
         advanced: {
           database: {
-            generateId(options) {
+            generateId(_options) {
               return 'HARD-CODED-ID'
             },
           },
@@ -194,17 +194,11 @@ describe('create Adapter Helper', async () => {
         expect(res).toHaveProperty('image')
         expect(res).toHaveProperty('createdAt')
         expect(res).toHaveProperty('updatedAt')
-        // @ts-ignore
         expect(res?.emailVerified).toEqual(false)
-        // @ts-ignore
         expect(res?.name).toEqual('test-name')
-        // @ts-ignore
         expect(res?.email).toEqual(undefined)
-        // @ts-ignore
         expect(res?.image).toEqual(undefined)
-        // @ts-ignore
         expect(res?.createdAt).toBeInstanceOf(Date)
-        // @ts-ignore
         expect(res?.updatedAt).toBeInstanceOf(Date)
       })
 
@@ -214,7 +208,6 @@ describe('create Adapter Helper', async () => {
           data: { name: 'test-name' },
         })
         expect(res).toHaveProperty('id')
-        // @ts-ignore
         expect(typeof res?.id).toEqual('string')
 
         const adapterWithoutIdGeneration = await createTestAdapter({
@@ -245,9 +238,9 @@ describe('create Adapter Helper', async () => {
         const createWithId: { id: unknown } = await new Promise((r) => {
           (async () => {
             const adapter = await createTestAdapter({
-              adapter(args_0) {
+              adapter(_args) {
                 return {
-                  async create({ data, model, select }) {
+                  async create({ data }) {
                     r(data as any)
                     return data
                   },
@@ -272,9 +265,9 @@ describe('create Adapter Helper', async () => {
                 disableIdGeneration: true,
                 debugLogs: {},
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
-                  async create({ data, model, select }) {
+                  async create({ data }) {
                     r(data as any)
                     return data
                   },
@@ -301,7 +294,7 @@ describe('create Adapter Helper', async () => {
 					      config: {
 					        supportsBooleans: false,
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async create(data) {
 					            r(data as any)
@@ -329,7 +322,7 @@ describe('create Adapter Helper', async () => {
 					      config: {
 					        supportsBooleans: false,
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async create(data) {
 					            r(data as any)
@@ -368,7 +361,7 @@ describe('create Adapter Helper', async () => {
 					          },
 					        },
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async create(data) {
 					            r(data as any)
@@ -401,7 +394,7 @@ describe('create Adapter Helper', async () => {
 					      config: {
 					        supportsDates: false,
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async create(data) {
 					            r(data as any)
@@ -438,7 +431,7 @@ describe('create Adapter Helper', async () => {
 					          return data
 					        },
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async create(data) {
 					            r(data as any)
@@ -478,7 +471,7 @@ describe('create Adapter Helper', async () => {
                   return data
                 },
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async create(data) {
                     r(data as any)
@@ -524,7 +517,7 @@ describe('create Adapter Helper', async () => {
                   return data
                 },
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async create(data) {
                     r(data as any)
@@ -561,7 +554,7 @@ describe('create Adapter Helper', async () => {
                   email: 'email_address',
                 },
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async create(data) {
                     r(data as any)
@@ -597,7 +590,7 @@ describe('create Adapter Helper', async () => {
                 },
               },
 
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async create(data) {
                     r(data as any)
@@ -637,7 +630,7 @@ describe('create Adapter Helper', async () => {
                   email_address: 'email',
                 },
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async create(data) {
                     r(data as any)
@@ -675,7 +668,7 @@ describe('create Adapter Helper', async () => {
 					          },
 					        },
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async create(data) {
 					            r(data as any)
@@ -712,7 +705,7 @@ describe('create Adapter Helper', async () => {
 					          modelName: 'user_table',
 					        },
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async create(data) {
 					            r(data as any)
@@ -748,7 +741,7 @@ describe('create Adapter Helper', async () => {
 					          },
 					        },
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async create(data) {
 					            r(data as any)
@@ -850,7 +843,7 @@ describe('create Adapter Helper', async () => {
 					      config: {
 					        supportsBooleans: false,
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async update(data) {
 					            r(data as any)
@@ -886,7 +879,7 @@ describe('create Adapter Helper', async () => {
 					      config: {
 					        supportsBooleans: false,
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async update(data) {
 					            r(data as any)
@@ -933,7 +926,7 @@ describe('create Adapter Helper', async () => {
 					          },
 					        },
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async update(data) {
 					            r(data as any)
@@ -971,7 +964,7 @@ describe('create Adapter Helper', async () => {
 					      config: {
 					        supportsDates: false,
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async update(data) {
 					            r(data as any)
@@ -1013,7 +1006,7 @@ describe('create Adapter Helper', async () => {
                   return data
                 },
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async update(data) {
                     r(data as any)
@@ -1057,7 +1050,7 @@ describe('create Adapter Helper', async () => {
                   return data
                 },
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async update(data) {
                     r(data as any)
@@ -1107,7 +1100,7 @@ describe('create Adapter Helper', async () => {
                   return data
                 },
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async update(data) {
                     r(data as any)
@@ -1149,7 +1142,7 @@ describe('create Adapter Helper', async () => {
                   email: 'email_address',
                 },
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async update(data) {
                     r(data as any)
@@ -1190,7 +1183,7 @@ describe('create Adapter Helper', async () => {
                   email: 'email_address',
                 },
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async update(data) {
                     r(data as any)
@@ -1235,7 +1228,7 @@ describe('create Adapter Helper', async () => {
                   email_address: 'email',
                 },
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async update(data) {
                     r(data as any)
@@ -1281,7 +1274,7 @@ describe('create Adapter Helper', async () => {
                   },
                 },
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async update(data) {
                     r(data as any)
@@ -1318,7 +1311,7 @@ describe('create Adapter Helper', async () => {
               config: {
                 disableIdGeneration: true,
               },
-              adapter(args_0) {
+              adapter(_args) {
                 return {
                   async update(data) {
                     r(data as any)
@@ -1355,7 +1348,7 @@ describe('create Adapter Helper', async () => {
 					          },
 					        },
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async findOne({ model, where, select }) {
 					            const fakeResult: Omit<User, 'email'> & {
@@ -1397,7 +1390,7 @@ describe('create Adapter Helper', async () => {
 					          },
 					        },
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async findMany({ model, where }) {
 					            const fakeResult: (Omit<User, 'email'> & {
@@ -1442,7 +1435,7 @@ describe('create Adapter Helper', async () => {
 					          },
 					        },
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async findOne({ model, where, select }) {
 					            const fakeResult: Omit<User, 'id'> & { id: number } = {
@@ -1484,7 +1477,7 @@ describe('create Adapter Helper', async () => {
 					          },
 					        },
 					      },
-					      adapter(args_0) {
+					      adapter(_args) {
 					        return {
 					          async findMany({ model, where }) {
 					            const fakeResult: (Omit<User, 'id'> & { id: number })[] = [
