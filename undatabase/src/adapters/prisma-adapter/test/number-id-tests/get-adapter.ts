@@ -5,7 +5,6 @@ export function getAdapter() {
   const db = new PrismaClient()
 
   async function clearDb() {
-    await db.sessions.deleteMany()
     await db.user.deleteMany()
     try {
       await db.$executeRaw`DELETE FROM sqlite_sequence WHERE name = 'User'`

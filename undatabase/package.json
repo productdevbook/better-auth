@@ -47,7 +47,9 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "prisma:normal:push": "prisma db push --schema src/adapters/prisma-adapter/test/normal-tests/schema.prisma --accept-data-loss",
+    "prisma:number-id:push": "prisma db push --schema src/adapters/prisma-adapter/test/number-id-tests/schema.prisma --accept-data-loss"
   },
   "optionalDependencies": {
     "@prisma/client": "^6.6.0",
@@ -63,6 +65,7 @@
     "drizzle-orm": "^0.41.0",
     "eslint": "^9.24.0",
     "mysql2": "^3.14.0",
+    "prisma": "^6.6.0",
     "tarn": "^3.0.2",
     "tedious": "^18.6.1",
     "typescript": "^5.8.3",
