@@ -10,6 +10,7 @@ export default defineConfig({
       reporter: ['text', 'json-summary', 'json'],
       include: ['src/**/*.ts'],
     },
+    fileParallelism: false,
     include: ['src/**/*.test.ts'],
   },
 })

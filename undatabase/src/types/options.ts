@@ -7,7 +7,6 @@ import type {
   LiteralUnion,
   Models,
   OmitId,
-  Session,
   User,
   Verification,
 } from '../types/index.ts'

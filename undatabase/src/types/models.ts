@@ -9,7 +9,6 @@ export type Models =
   | 'user'
   | 'account'
   | 'verification'
-  | 'rate-limit'
   | 'organization'
   | 'member'
   | 'invitation'
