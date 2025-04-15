@@ -4,7 +4,7 @@ import merge from 'deepmerge'
 import { drizzle } from 'drizzle-orm/mysql2'
 import { Kysely, MysqlDialect } from 'kysely'
 import { createPool } from 'mysql2/promise'
-import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, describe } from 'vitest'
 import { getMigrations } from '../../../db/get-migration.ts'
 import { runAdapterTest, runNumberIdAdapterTest } from '../../test.ts'
 import { drizzleAdapter } from '../index.ts'
@@ -63,7 +63,7 @@ describe('drizzle Adapter Tests (MySQL)', async () => {
 
   pool = createTestPool()
   mysql = createKyselyInstance(pool)
-  let opts = createTestOptions(pool)
+  const opts = createTestOptions(pool)
   const { runMigrations } = await getMigrations(opts)
   await runMigrations()
 
@@ -95,7 +95,7 @@ describe('drizzle Adapter Number Id Test (MySQL)', async () => {
 
   pool = createTestPool()
   mysql = createKyselyInstance(pool)
-  let opts = createTestOptions(pool, true)
+  const opts = createTestOptions(pool, true)
 
   beforeAll(async () => {
     await cleanupDatabase(pool, false)
