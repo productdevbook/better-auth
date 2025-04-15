@@ -58,11 +58,9 @@ function createTestOptions(pool: any, useNumberId = false) {
 }
 
 describe('drizzle Adapter Tests (MySQL)', async () => {
-  let pool: any
-  let mysql: Kysely<any>
+  const pool: any = createTestPool()
+  const _mysql: Kysely<any> = createKyselyInstance(pool)
 
-  pool = createTestPool()
-  mysql = createKyselyInstance(pool)
   const opts = createTestOptions(pool)
   const { runMigrations } = await getMigrations(opts)
   await runMigrations()
@@ -90,11 +88,8 @@ describe('drizzle Adapter Tests (MySQL)', async () => {
 })
 
 describe('drizzle Adapter Number Id Test (MySQL)', async () => {
-  let pool: any
-  let mysql: Kysely<any>
-
-  pool = createTestPool()
-  mysql = createKyselyInstance(pool)
+  const pool: any = createTestPool()
+  const _mysql: Kysely<any> = createKyselyInstance(pool)
   const opts = createTestOptions(pool, true)
 
   beforeAll(async () => {

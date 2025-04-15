@@ -1,6 +1,6 @@
 import type { Database } from 'better-sqlite3'
 import type { Dialect, Kysely, MysqlPool, PostgresPool } from 'kysely'
-// import type { KyselyDatabaseType } from '../adapters/kysely-adapter/types'
+import type { KyselyDatabaseType } from '../adapters/kysely-adapter/types.ts'
 import type { FieldAttribute } from '../db/index.ts'
 import type {
   Account,
@@ -81,7 +81,7 @@ export interface BetterAuthOptions {
     | AdapterInstance
     | {
       dialect: Dialect
-      // type: KyselyDatabaseType
+      type: KyselyDatabaseType
       /**
        * casing for table names
        *
@@ -97,7 +97,7 @@ export interface BetterAuthOptions {
       /**
        * Database type between postgres, mysql and sqlite
        */
-      // type: KyselyDatabaseType
+      type: KyselyDatabaseType
       /**
        * casing for table names
        *
