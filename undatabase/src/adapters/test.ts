@@ -1,6 +1,5 @@
 import type { Adapter, BetterAuthOptions, User } from '../types/index.ts'
 import { beforeAll, describe, expect, test } from 'vitest'
-import { generateId } from '../utils/index.ts'
 
 interface AdapterTestOptions {
   getAdapter: (
@@ -51,10 +50,6 @@ const numberIdAdapterTests = {
   SHOULD_RETURN_A_NUMBER_ID_AS_A_RESULT: 'Should return a number id as a result',
   SHOULD_INCREMENT_THE_ID_BY_1: 'Should increment the id by 1',
 } as const
-
-// @ts-ignore
-// biome-ignore lint/performance/noDelete: <explanation>
-delete numberIdAdapterTests.SHOULD_NOT_THROW_ON_DELETE_RECORD_NOT_FOUND
 
 async function adapterTest(
   { getAdapter, disableTests: disabledTests, testPrefix }: AdapterTestOptions,
